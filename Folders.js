@@ -26,6 +26,11 @@ const Folders = ({ navigation, route }) => {
     setAllData(Service.obj);
   }
 
+  const toPage = (newId) => {
+    navigation.navigate('Folders', { id: newId });
+//    setId(newId);
+  }
+
   useEffect(()=>{
     Service.getItems()
       .then((data)=>data)
@@ -48,7 +53,7 @@ const Folders = ({ navigation, route }) => {
             <Text>VD: {JSON.stringify(visualData)}</Text>
         </View>
         <View style={styles.mainSection}>
-            <Folder visualData={visualData} allData={allData} id={id} isParent={true}/>
+            <Folder toPage={toPage} visualData={visualData} allData={allData} id={id} isParent={true}/>
         </View>
     </View>
   );
@@ -66,10 +71,10 @@ const styles = StyleSheet.create({
     height:'10%'
    },
   infoSection: {
-    height:'25%'
+    height:'0%'
    },
   mainSection: {
-    height:'65%',
+    height:'90%',
     backgroundColor: "#ff0000"
    }
 });

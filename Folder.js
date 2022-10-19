@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ChildFolder from './ChildFolder.js'
 
 const Folder = (props) => {
     let children = null;
     const id = props.id;
     let visualData = {...props.visualData};
     let parentData = {...visualData[1]};
-//    let childrenString = "" + JSON.stringify(parentData.children);
-//    let childrenArr = childrenString.slice(1, -1).split(",");
-//    let data = childrenArr[0];
 
     if (props.isParent){
        let parentData = {...visualData[1]};
@@ -18,7 +16,7 @@ const Folder = (props) => {
         children = childrenArr.map((e,key)=>{
             return(
                 <View style={height="10%"}>
-                    <Folder id={e} key={key} visualData={visualData[e]} isParent={false} />
+                    <ChildFolder toPage={props.toPage} id={e} key={key} visualData={visualData[e]} isParent={false} />
                 </View>
 //                    <Text>hi</Text>
             )
@@ -35,6 +33,11 @@ const Folder = (props) => {
         <View style={localStyle}>
             <Text>Folder {id}</Text>
             <Text>Parent: {parentStatus}</Text>
+            <Text>props: {JSON.stringify(props)}</Text>
+            <Button
+              title="Tacos"
+              onPress={() =>props.toPage()}
+            />
             {children}
 
         </View>
@@ -45,25 +48,10 @@ const Folder = (props) => {
 
 const styles = StyleSheet.create({
   main: {
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     borderColor: "#ff0000",
-    height:'75%'
-  },
-  modalView: {
-    margin: 5,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 100,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
+    height:'99%'
   },
   button: {
     borderRadius: 20,
