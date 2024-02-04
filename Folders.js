@@ -14,21 +14,29 @@ const Folders = ({ navigation, route }) => {
   const [id, setId] = useState(route.params.id);
   const [visualData, setVisualData] = useState({pre:"not changed"});
   const [allData, setAllData] = useState();
+  const [initial, setInitial] = useState(false);
+  const [test, setTest] = useState("false");
+
 
   function gatherRecords() {
     let data = {start:"at least this worked"};
     let primary = Service.obj[id];
-    data[id] = primary;
-    let childrenArr = primary.children;
-    childrenArr.map((i,key)=>{data[i]=Service.obj[i]});
-    data.test=childrenArr.toString();
+    console.log("Primary");
+    if (!!primary){
+        data[id] = primary;
+        let childrenArr = primary.children;
+        if(!!childrenArr){
+            childrenArr.map((i,key)=>{data[i]=Service.obj[i]});
+        }
+    //    data.test=childrenArr.toString();
+    }
     setVisualData(data);
     setAllData(Service.obj);
   }
 
   const toPage = (newId) => {
-    navigation.navigate('Folders', { id: newId });
-//    setId(newId);
+    setId(newId);
+//    navigation.navigate('Folders', { id: newId });
   }
 
   useEffect(()=>{
@@ -38,9 +46,16 @@ const Folders = ({ navigation, route }) => {
         setItemObj(res);
         setReady(Service.obj.ready);
         gatherRecords();
+        setInitial(true);
         });
   },[record]);
 
+    useEffect(()=>{
+        if(initial){
+            gatherRecords();
+            setTest("true");
+        }
+    },[id]);
 
   return (
     <View>
@@ -48,9 +63,10 @@ const Folders = ({ navigation, route }) => {
             <ItemInput record={record} itemObj={itemObj} setRecord={setRecord} parentId={id} />
         </View>
         <View style={styles.infoSection}>
-            <Text>ID: {id}{ready?"ready":"not"}</Text>
-            <Text>obj: {JSON.stringify(itemObj)}</Text>
+            <Text>ID: {id}{ready?"ready":"not"}{route.params.id}</Text>
+            <Text>ID: {test}</Text>
             <Text>VD: {JSON.stringify(visualData)}</Text>
+            <Text>obj: {JSON.stringify(itemObj)}</Text>
         </View>
         <View style={styles.mainSection}>
             <Folder toPage={toPage} visualData={visualData} allData={allData} id={id} isParent={true}/>
@@ -71,10 +87,10 @@ const styles = StyleSheet.create({
     height:'10%'
    },
   infoSection: {
-    height:'0%'
+    height:'10%'
    },
   mainSection: {
-    height:'90%',
+    height:'80%',
     backgroundColor: "#ff0000"
    }
 });

@@ -41,9 +41,14 @@ const ItemInput = ( props ) => {
         }
     },[item]);
 
+    useEffect(()=>{
+        setParent(Number(props.parentId.toString().replace(/"/g,'')));
+    },[props.parentId])
+
+
 
   return (
-        <View style={styles.main}>
+        <View key={props.parentId} style={styles.main}>
           <Modal
             animationType="slide"
             transparent={true}
